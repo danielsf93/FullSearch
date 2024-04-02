@@ -10,34 +10,35 @@ class FullSearchDAO extends DAO {
         parent::__construct();
     }
 
-    // Método com função, que deve ser resgatado e passado ao arquivo .tpl via handler.inc.php
     public function obterDados() {
-        $result = $this->retrieve(
-            // DISTINCT obtem a lista de copyrights evitando repetição
-            'SELECT DISTINCT CONVERT(setting_value USING utf8) as setting_value FROM publication_settings WHERE CONVERT(setting_name USING utf8) = ?',
-            ['copyrightHolder']
+        $results = $this->retrieve(
+            'SELECT ps1.setting_value AS copyrightholder, ps2.setting_value AS title, ps2.publication_id AS publication_id
+            FROM publication_settings ps1
+            JOIN publication_settings ps2 ON ps1.publication_id = ps2.publication_id
+            WHERE ps1.setting_name = "copyrightHolder"
+            AND ps2.setting_name = "title"'
         );
-
-        // Inicializa um array para armazenar os resultados
+    
         $dados = array();
-
-        // Percorre os resultados
-        foreach ($result as $row) {
-            $settingValue = $row->setting_value; 
-            // Remove "Universidade de São Paulo. " da string
-            $settingValue = str_replace("Universidade de São Paulo. ", "", $settingValue);
-
-            $dados[] = $settingValue;
+    
+        foreach ($results as $row) {
+            $copyrightholder = $row->copyrightholder;
+            $title = $row->title;
+            $publicationId = $row->publication_id;
+    
+            // Remove "Universidade de São Paulo. " do copyrightholder
+            $copyrightholder = str_replace("Universidade de São Paulo. ", "", $copyrightholder);
+    
+            // Adiciona o título e o ID ao array associado ao copyrightholder
+            $dados[$copyrightholder][] = array(
+                'title' => $title,
+                'publication_id' => $publicationId
+            );
         }
-
-        // Ordenar os resultados em ordem alfabética
-        sort($dados);
-
-        // Converta para UTF-8
-        $dados = array_map(function($value) {
-            return mb_convert_encoding($value, 'UTF-8', 'auto');
-        }, $dados);
-
+    
         return $dados;
     }
+    
+    
+    
 }
