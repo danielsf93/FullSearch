@@ -3,13 +3,13 @@
 {include file="frontend/components/header.tpl" pageTitleTranslated=$title}
 
 <div class="page">
-    <h1>Livros Por Unidade</h1>
+    <h1>{translate key="plugins.generic.fullsearch.pagetitle"}</h1>
     
     {foreach from=$obterDados item=copyrightholder key=copyrightholderName}
         <div class="copyright-holder">
             <h2>{$copyrightholderName}</h2>
             
-            <button class="expand-button">Mostrar Lista</button>
+            <button class="expand-button">{translate key="plugins.generic.fullsearch.show"}</button>
             <div class="book-list" style="display:none;">
                 <ul>
                     {foreach from=$copyrightholder item=book}
@@ -56,10 +56,10 @@
                 const bookList = this.nextElementSibling;
                 if (bookList.style.display === 'none') {
                     bookList.style.display = 'block';
-                    this.innerHTML = 'Recolher';
+                    this.innerHTML = '{translate key="plugins.generic.fullsearch.hide"}';
                 } else {
                     bookList.style.display = 'none';
-                    this.innerHTML = 'Mostrar lista';
+                    this.innerHTML = '{translate key="plugins.generic.fullsearch.show"}';
                 }
             });
         });

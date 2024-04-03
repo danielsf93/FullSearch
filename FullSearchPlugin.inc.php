@@ -44,10 +44,10 @@ class FullSearchPlugin extends GenericPlugin {
     }
 
     function getDisplayName() {
-        return __('plugins.generic.Fullsearch.displayName');
+        return __('plugins.generic.fullsearch.displayname');
     }
 
     function getDescription() {
-        return __('plugins.generic.Fullsearch.description');
+        return __('plugins.generic.fullsearch.description');
     }
 }
